@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "white",
 		padding: 16,
 		borderColor: Colors.grey,
-		borderBottomWidth: 1,
+		borderWidth: 1,
 	},
 });
 export default BottomSheet;
