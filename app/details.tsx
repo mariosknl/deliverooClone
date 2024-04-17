@@ -19,9 +19,12 @@ import Animated, {
 	useSharedValue,
 	withTiming,
 } from "react-native-reanimated";
+import useBasketStore from "@/store/basketStore";
+import { SafeAreaView } from "react-native-safe-area-context";
 const Details = () => {
 	const navigation = useNavigation();
 	const [activeIndex, setActiveIndex] = useState(0);
+	const { items, total } = useBasketStore();
 
 	const opacity = useSharedValue(0);
 	const animatedStyles = useAnimatedStyle(() => ({
@@ -156,6 +159,7 @@ const Details = () => {
 				</View>
 			</ParallaxScrollView>
 
+			{/* Sticky Segments */}
 			<Animated.View style={[styles.stickySegments, animatedStyles]}>
 				<View style={styles.segmentsShadow}>
 					<ScrollView
@@ -189,6 +193,21 @@ const Details = () => {
 					</ScrollView>
 				</View>
 			</Animated.View>
+
+			{/* Footer Basket */}
+			{items > 0 && (
+				<View style={styles.footer}>
+					<SafeAreaView edges={["bottom"]}>
+						<Link href="/basket" asChild>
+							<TouchableOpacity style={styles.fullButton}>
+								<Text style={styles.basket}>{items}</Text>
+								<Text style={styles.footerText}>View Basket</Text>
+								<Text style={styles.basketTotal}>Total: €{total}</Text>
+							</TouchableOpacity>
+						</Link>
+					</SafeAreaView>
+				</View>
+			)}
 		</>
 	);
 };
@@ -309,6 +328,50 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		gap: 20,
 		paddingBottom: 4,
+	},
+	footer: {
+		position: "absolute",
+		backgroundColor: "#fff",
+		bottom: 0,
+		left: 0,
+		width: "100%",
+		padding: 10,
+		elevation: 10,
+		shadowColor: "#000",
+		shadowOffset: {
+			width: 0,
+			height: -5,
+		},
+		shadowOpacity: 0.1,
+		shadowRadius: 10,
+		paddingTop: 20,
+	},
+	footerText: {
+		color: "#fff",
+		fontSize: 16,
+		fontWeight: "bold",
+	},
+	basket: {
+		color: "#fff",
+		backgroundColor: "#19AA86",
+		padding: 8,
+		borderRadius: 2,
+		fontWeight: "bold",
+	},
+	basketTotal: {
+		color: "#fff",
+		fontSize: 16,
+		fontWeight: "bold",
+	},
+	fullButton: {
+		backgroundColor: Colors.primary,
+		paddingHorizontal: 16,
+		alignItems: "center",
+		borderRadius: 8,
+		flex: 1,
+		height: 50,
+		flexDirection: "row",
+		justifyContent: "space-between",
 	},
 });
 export default Details;
